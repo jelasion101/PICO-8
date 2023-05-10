@@ -1,0 +1,76 @@
+pico-8 cartridge // http://www.pico-8.com
+version 29
+__lua__
+
+#include alarms.lua
+#include colors.lua
+list1 = {}
+list2 = {}
+
+
+function _init()
+	i = 1
+	for i = 1, 128 do
+		if i < 65 then
+			add(list1, i)
+		else
+			add(list2, i)
+		end
+	end
+	
+	shuffle(list1)
+	shuffle(list2)
+	
+	fullist = {}
+	for i, v in pairs(list1) do
+		add(fullist, v)
+	end
+	for i, v in pairs(list2) do
+		add(fullist, v)
+	end
+end
+
+function _update()
+	for k = i + 1, #list1 do
+		if list1[i] < list1[k] then
+			placeholder = list1[i]
+			list1[i] = list1[k]
+			list1[k] = placeholder
+		end
+	end
+	i += 1
+end
+
+function shuffle(list)
+	r = 1
+	repeat
+		ind = flr(rnd(128)) + 1
+		placeholder = list[ind]
+		del(list, placeholder)
+		add(list, placeholder)
+		r += 1
+	until r == 1000
+end
+
+
+function _draw()
+	cls(BLACK)
+	color(WHITE)
+	for i=1,128 do
+		if i < 65 then
+			color( (i%15)+1 ) -- draw with the 15 non-black colors
+			line(i-1,128,i-1,128 - list1[i])
+		else
+			color( (i%15)+1 ) -- draw with the 15 non-black colors
+			line(i-1,127,i-1,127 - list2[i])
+		end
+	end
+end
+
+__gfx__
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00700700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00077000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00077000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00700700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
